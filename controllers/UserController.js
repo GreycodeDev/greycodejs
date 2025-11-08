@@ -1,79 +1,137 @@
-const { User } = require('../models');
+const { User } = require('../models/models');
 
-// Create
+/**
+ * UserController
+ * Handles CRUD operations for User
+ */
+
+// Create new User
 const create = async (req, res) => {
   try {
-    // Logic for creating a User
+    const data = await User.create(req.body);
+    
+    return res.status(201).json({
+      success: true,
+      data,
+      message: 'User created successfully'
+    });
   } catch (error) {
-    return res.json({
+    req.logger?.error('Error creating user:', error);
+    return res.status(500).json({
       success: false,
-      msg: error.message,
-      error: 'Internal server error!',
+      message: error.message,
+      error: 'Internal server error',
     });
   }
 };
 
-// Get All
+// Get all Users
 const getAll = async (req, res) => {
   try {
-    const users = await User.findAll();
-
-    return res.render('users', {
-      title: 'User List',
-      users,
+    const data = await User.findAll();
+    
+    return res.json({
+      success: true,
+      data,
+      count: data.length
     });
   } catch (error) {
-    return res.json({
+    req.logger?.error('Error fetching users:', error);
+    return res.status(500).json({
       success: false,
-      msg: error.message,
-      error: 'Internal server error!',
+      message: error.message,
+      error: 'Internal server error',
     });
   }
 };
 
-// Get By ID
+// Get User by ID
 const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    // Logic for retrieving a User by ID
-  } catch (error) {
+    const data = await User.findByPk(id);
+    
+    if (!data) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+    
     return res.json({
+      success: true,
+      data
+    });
+  } catch (error) {
+    req.logger?.error('Error fetching user:', error);
+    return res.status(500).json({
       success: false,
-      msg: error.message,
-      error: 'Internal server error!',
+      message: error.message,
+      error: 'Internal server error',
     });
   }
 };
 
-// Update
+// Update User
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    // Logic for updating a User
-  } catch (error) {
+    const data = await User.findByPk(id);
+    
+    if (!data) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+    
+    await data.update(req.body);
+    
     return res.json({
+      success: true,
+      data,
+      message: 'User updated successfully'
+    });
+  } catch (error) {
+    req.logger?.error('Error updating user:', error);
+    return res.status(500).json({
       success: false,
-      msg: error.message,
-      error: 'Internal server error!',
+      message: error.message,
+      error: 'Internal server error',
     });
   }
 };
 
-// Delete
+// Delete User
 const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    // Logic for deleting a User
-  } catch (error) {
+    const data = await User.findByPk(id);
+    
+    if (!data) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+    
+    await data.destroy();
+    
     return res.json({
+      success: true,
+      message: 'User deleted successfully'
+    });
+  } catch (error) {
+    req.logger?.error('Error deleting user:', error);
+    return res.status(500).json({
       success: false,
-      msg: error.message,
-      error: 'Internal server error!',
+      message: error.message,
+      error: 'Internal server error',
     });
   }
 };
 
-module.exports.UserController = {
+module.exports = {
   create,
   getAll,
   getById,

@@ -2,21 +2,35 @@
   "name": "greycodejs",
   "version": "0.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cli": "node bin/cli.js",
+    "db:check": "node scripts/troubleshoot-db.js"
   },
   "bin": {
     "greycodejs": "./bin/cli.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "express",
+    "framework",
+    "mvc",
+    "orm",
+    "sequelize",
+    "cli",
+    "scaffolding"
+  ],
+  "author": "Kudzai Munyama",
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^9.3.0",
     "@greycode/env_init": "^1.0.5",
     "@greycode/gitignore_init": "^0.0.2",
+    "@prisma/client": "^6.19.0",
     "bcryptjs": "^2.4.3",
+    "chalk": "^4.1.2",
     "commander": "^12.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -24,13 +38,19 @@
     "express": "^4.21.2",
     "faker": "^6.6.6",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.3",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.5",
     "sequelize": "^6.37.5",
+    "umzug": "^3.8.2",
     "validator": "^13.12.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
   }
 }
